@@ -66,24 +66,6 @@ export default function AuthShell() {
                     </Switch>
                 </Card>
 
-                <div className="mx-auto flex flex-wrap gap-4 justify-center mb-2">
-                    <a
-                        href='https://discord.gg/uAmsGa2'
-                        onClick={handleExternalLinkClick}
-                        target='_blank'
-                        className='w-48 h-16 relative group shadow-sm opacity-90 hover:opacity-100 brightness-110
-                        dark:brightness-95 dark:hover:brightness-110'
-                    >
-                        <div className='absolute inset-0 -z-10 animate-pulse blur 
-                        scale-0 group-hover:scale-100 transition-transform bg-black
-                        dark:bg-gradient-to-t dark:from-[#8567EC] dark:to-[#BD5CBF]' />
-                        <img
-                            className='rounded-lg max-w-48 max-h-16 m-auto'
-                            src="img/discord.png"
-                        />
-                    </a>
-                </div>
-
                 <div className="text-center text-muted-foreground text-sm font-light">
                     tx: <strong>v{window.txConsts.txaVersion}</strong>
                     &nbsp;|
