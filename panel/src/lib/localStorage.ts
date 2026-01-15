@@ -34,6 +34,7 @@ export enum LocalStorageKey {
     ErrorFallbackLastReload = 'txa:errorFallback:lastReload',
     UpdateWarningPostponedTs = 'txa:updateWarning:postponedTs',
     PlayersPageSearchType = 'txa:playersPage:searchType',
+    ReportsPageSearchType = 'txa:reportsPage:searchType',
     AuthCredsAutofill = 'txa:authCreds:autofill',
 
     // atomWithStorage
