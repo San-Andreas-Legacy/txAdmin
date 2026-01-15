@@ -59,6 +59,9 @@ export { default as player_modal } from './player/modal';
 export { default as player_actions } from './player/actions';
 export { default as player_checkJoin } from './player/checkJoin';
 
+export { default as report_stats } from './reports/stats';
+export { default as report_search } from './reports/search';
+
 export { default as whitelist_page } from './whitelist/page';
 export { default as whitelist_list } from './whitelist/list';
 export { default as whitelist_actions } from './whitelist/actions';
