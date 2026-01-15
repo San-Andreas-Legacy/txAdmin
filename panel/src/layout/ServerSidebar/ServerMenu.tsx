@@ -4,9 +4,8 @@ import { useAdminPerms } from '@/hooks/auth';
 import { serverNameAtom, txConfigStateAtom } from '@/hooks/status';
 import { cn } from '@/lib/utils';
 import { TxConfigState } from '@shared/enums';
-import { GlobalStatusType } from '@shared/socketioTypes';
 import { useAtomValue } from 'jotai';
-import { BoxIcon, ChevronRightSquareIcon, DnaIcon, EyeIcon, FileEditIcon, HourglassIcon, LayoutDashboardIcon } from 'lucide-react';
+import { BoxIcon, ChevronRightSquareIcon, DnaIcon, EyeIcon, FileEditIcon, HourglassIcon, LayoutDashboardIcon, MessageSquareWarning } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'wouter';
 
@@ -95,6 +94,9 @@ export default function ServerMenu() {
                 </MenuNavLink>
                 <MenuNavLink href="/server/cfg-editor" disabled={!hasPerm('server.cfg.editor')}>
                     <FileEditIcon className="mr-2 h-4 w-4" />CFG Editor
+                </MenuNavLink>
+                <MenuNavLink href="/server/reports" disabled={!hasPerm('menu.reports')}>
+                    <MessageSquareWarning className="mr-2 h-4 w-4" />Reports
                 </MenuNavLink>
                 {window.txConsts.showAdvanced && (
                     <MenuNavLink href="/advanced" className='text-accent' disabled={!hasPerm('all_permisisons')}>

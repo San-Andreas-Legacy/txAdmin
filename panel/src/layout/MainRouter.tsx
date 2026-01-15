@@ -21,6 +21,7 @@ import SettingsPage from "@/pages/Settings/SettingsPage";
 import UnauthorizedPage from "@/pages/UnauthorizedPage";
 import DiagnosticsPage from "@/pages/Diagnostics/DiagnosticsPage";
 import AdvancedPage from "@/pages/AdvancedPage";
+import ReportsPage from "@/pages/Reports/ReportsPage";
 
 
 type RouteType = {
@@ -115,6 +116,12 @@ const allRoutes: RouteType[] = [
         title: 'CFG Editor',
         permission: 'server.cfg.editor',
         Page: <Iframe legacyUrl="cfgEditor" />
+    },
+    {
+        path: '/server/reports',
+        title: 'Reports Menu',
+        permission: 'menu.reports',
+        Page: <ReportsPage />
     },
     {
         path: '/server/setup',
