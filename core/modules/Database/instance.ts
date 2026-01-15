@@ -19,6 +19,7 @@ export const defaultDatabase = {
     version: DATABASE_VERSION,
     actions: [],
     players: [],
+    reports: [],
     whitelistApprovals: [],
     whitelistRequests: [],
 };
@@ -165,6 +166,7 @@ export class DbInstance {
             if (
                 !Array.isArray(this.obj!.data.actions)
                 || !Array.isArray(this.obj!.data.players)
+                || !Array.isArray(this.obj!.data.reports)
                 || !Array.isArray(this.obj!.data.whitelistApprovals)
                 || !Array.isArray(this.obj!.data.whitelistRequests)
             ) {

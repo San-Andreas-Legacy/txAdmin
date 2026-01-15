@@ -15,6 +15,25 @@ export type DatabasePlayerType = {
     };
 };
 
+export type DatabaseReportType = {
+    id: string;
+    subject: string;
+    reporter: {
+        license: string;
+        name: string;
+    }; // player license
+    status: 'open' | 'in-progress' | 'resolved';
+    messages: {
+        content: string;
+        author: {
+            license: string;
+            name: string;
+        };
+    }[];
+    tsOpened: number;
+    tsLastAction: number;
+};
+
 export type DatabaseActionBaseType = {
     id: string;
     ids: string[];
@@ -63,6 +82,7 @@ export type DatabaseDataType = {
     version: number,
     players: DatabasePlayerType[],
     actions: DatabaseActionType[],
+    reports: DatabaseReportType[],
     whitelistApprovals: DatabaseWhitelistApprovalsType[],
     whitelistRequests: DatabaseWhitelistRequestsType[],
 };
