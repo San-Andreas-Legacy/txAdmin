@@ -118,7 +118,7 @@ const allRoutes: RouteType[] = [
         Page: <Iframe legacyUrl="cfgEditor" />
     },
     {
-        path: '/server/reports',
+        path: '/reports',
         title: 'Reports Menu',
         permission: 'menu.reports',
         Page: <ReportsPage />

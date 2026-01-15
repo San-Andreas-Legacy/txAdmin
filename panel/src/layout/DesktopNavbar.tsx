@@ -94,6 +94,9 @@ export default function DesktopNavbar() {
                     <HeaderMenuItem href="/players">
                         Players
                     </HeaderMenuItem>
+                    <HeaderMenuItem href="/reports" disabled={!hasPerm('menu.reports')}>
+                        Reports
+                    </HeaderMenuItem>
                     <HeaderMenuItem href="/history">
                         History
                     </HeaderMenuItem>
