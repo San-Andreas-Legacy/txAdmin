@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "The shared package contains stuff used in more than one package, no build step required.",
     "main": "index.js",
+    "type": "module",
     "scripts": {
         "test": "echo \"No tests for this workspace. Skipping...\"",
         "typecheck": "tsc -p tsconfig.json --noEmit",
