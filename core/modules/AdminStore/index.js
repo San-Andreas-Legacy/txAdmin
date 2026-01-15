@@ -65,6 +65,7 @@ export default class AdminStore {
             'players.remove_data': 'Remove Player Data',
 
             'menu.vehicle': 'Spawn / Fix Vehicles',
+            'menu.reports': 'Interact with player Reports',
             'menu.clear_area': 'Reset world area',
             'menu.viewids': 'View Player IDs in-game', //be able to see the ID of the players
             'players.direct_message': 'Direct Message',
