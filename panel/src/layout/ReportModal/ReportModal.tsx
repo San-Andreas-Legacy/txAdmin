@@ -1,10 +1,11 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { useReportModalStateValue } from "@/hooks/reportModal";
 import { useOpenPlayerModal } from "@/hooks/playerModal";
-import { UserIcon, CheckCircleIcon } from "lucide-react";
+import { UserIcon, CheckCircleIcon, SendIcon } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import GenericSpinner from "@/components/GenericSpinner";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { cn, getSocket } from "@/lib/utils";
 import { useBackendApi } from "@/hooks/fetch";
 import { ServerReportDto } from "@shared/reportApiTypes";
@@ -18,6 +19,7 @@ export default function ReportModal() {
     const [modalData, setModalData] = useState<ServerReportDto | undefined>(undefined);
     const [activeTicket, setActiveTicket] = useState<boolean>(false);
     const [modalError, setModalError] = useState('');
+    const [messageInput, setMessageInput] = useState('');
     
     const pageSocket = useRef<ReturnType<typeof getSocket> | null>(null);
 
@@ -71,10 +73,33 @@ export default function ReportModal() {
 
     const handleCloseReport = () => {
         if (!reportRef) return;
+
         closeReportApi({
             data: { id: reportRef.reportId },
             success: () => closeModal()
         });
+    };
+
+    const handleSendMessage = () => {
+        if (!reportRef || !activeTicket) return;
+        const trimmed = messageInput.trim();
+        if (!trimmed || !pageSocket.current) return;
+
+        // Emit to server - assuming your backend listens for 'newMessage' 
+        // or similar on the specific report room/socket
+        pageSocket.current.emit('newMessage', {
+            reportId: reportRef.reportId,
+            message: trimmed
+        });
+
+        setMessageInput('');
+    };
+
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+        }
     };
 
     return (
@@ -84,7 +109,7 @@ export default function ReportModal() {
                     <DialogTitle className="tracking-wide line-clamp-1 break-all flex-1">
                         {modalData ? (
                             <div className="flex items-center gap-2">
-                                <span>{modalData.subject}</span>
+                                <span>{!activeTicket && '[CLOSED] '}{modalData.subject}</span>
                             </div>
                         ) : "Connecting..."}
                     </DialogTitle>
@@ -94,9 +119,9 @@ export default function ReportModal() {
                             <Button size="sm" variant="outline" className="h-8" onClick={() => openPlayerModal({ license: modalData.reporter_license })}>
                                 <UserIcon className="h-4 w-4 mr-1.5" /> Player
                             </Button>
-                            <Button size="sm" variant="destructive" className="h-8" onClick={handleCloseReport}>
+                            {activeTicket && <Button size="sm" variant="destructive" className="h-8" onClick={handleCloseReport}>
                                 <CheckCircleIcon className="h-4 w-4 mr-1.5" /> Close
-                            </Button>
+                            </Button>}
                         </div>
                     )}
                 </DialogHeader>
@@ -126,6 +151,28 @@ export default function ReportModal() {
                         </div>
                     )}
                 </div>
+
+                {modalData && activeTicket && (
+                    <div className="p-3 border-t bg-background">
+                        <div className="flex items-center gap-2">
+                            <Input
+                                placeholder="Type a message..."
+                                value={messageInput}
+                                onChange={(e) => setMessageInput(e.target.value)}
+                                onKeyDown={handleKeyPress}
+                                className="flex-1"
+                                autoComplete="off"
+                            />
+                            <Button 
+                                size="icon" 
+                                onClick={handleSendMessage} 
+                                disabled={!messageInput.trim()}
+                            >
+                                <SendIcon className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    </div>
+                )}
             </DialogContent>
         </Dialog>
     );
