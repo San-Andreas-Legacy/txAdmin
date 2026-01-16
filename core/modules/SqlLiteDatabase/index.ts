@@ -29,6 +29,14 @@ export class DB {
     }
 
     /**
+     * Executes a query param yielding only one row
+     */
+    single<T>(sql: string, params: any[] = []): T {
+        const response = this.query<T>(sql, params);
+        return response[0];
+    }
+
+    /**
      * Dynamically inserts data into a table
      */
     insert(table: string, data: Record<string, any>) {
