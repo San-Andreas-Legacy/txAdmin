@@ -98,3 +98,25 @@ export type ReportsTableSearchResp = {
     reports: ReportsTablePlayerType[];
     hasReachedEnd: boolean;
 } | GenericApiErrorResp;
+
+export enum ServerReportStatus {
+    OPEN = 'open',
+    INPROGRESS = 'in-progress',
+    RESOLVED = 'resolved',
+};
+
+export interface ServerReportMessage {
+    message: string;
+    ts: number;
+    author: ReportMember;
+}
+
+export interface ServerReportDto {
+    id: string;
+    reporter: ReportMember;
+    subject: string;
+    status: ServerReportStatus;
+    messages: ServerReportMessage[];
+    tsOpened: number;
+    tsLastAction: number;
+}
