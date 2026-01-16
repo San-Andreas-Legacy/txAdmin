@@ -1,5 +1,5 @@
 import { DB } from "@modules/SqlLiteDatabase";
-import { ReportCloseResp, ReportsTableSearchResp, ServerReportDto, ServerReportStatus } from "@shared/reportApiTypes";
+import { ReportCloseResp, ReportsTableSearchResp, ServerReportDto, ServerReportMessage, ServerReportStatus } from "@shared/reportApiTypes";
 import { randomUUID } from "crypto";
 
 const DEFAULT_LIMIT = 100;
@@ -55,6 +55,8 @@ export class ServerReport {
         if (!report) return { error: `No report found with id: ${id}` };
 
         report.closeTicket(author);
+
+        this.activeReports.delete(id);
 
         return { success: true };
     }
@@ -158,6 +160,54 @@ export class ServerReport {
         );
 
         return response;
+    }
+
+    static loadFromDatabase() {// 1. Fetch all reports that are NOT resolved
+        const reports = this.database.query<any>(`
+            SELECT * FROM reports 
+            WHERE status != 'resolved'
+        `);
+
+        if (!reports.length) return;
+
+        // 2. Fetch all messages for these specific reports
+        const reportIds = reports.map(r => r.id);
+        const placeholders = reportIds.map(() => '?').join(',');
+        const allMessages = this.database.query<any>(`
+            SELECT * FROM reports_messages 
+            WHERE report_id IN (${placeholders})
+            ORDER BY timestamp ASC
+        `, reportIds);
+
+        // 3. Group messages by their report_id
+        const messagesMap = new Map<string, ServerReportMessage[]>();
+        for (const msg of allMessages) {
+            if (!messagesMap.has(msg.report_id)) {
+                messagesMap.set(msg.report_id, []);
+            }
+            messagesMap.get(msg.report_id)!.push({
+                message: msg.message,
+                author_license: msg.author_license,
+                author_name: msg.author_name,
+                timestamp: msg.timestamp
+            });
+        }
+
+        // 4. Instantiate and store in the activeReports Map
+        for (const r of reports) {
+            const report = new ServerReport({
+                id: r.id,
+                reporter_license: r.reporter_license,
+                reporter_name: r.reporter_name,
+                subject: r.subject,
+                status: r.status as ServerReportStatus,
+                ts_opened: r.ts_opened,
+                ts_lastaction: r.ts_lastaction,
+                messages: messagesMap.get(r.id) || []
+            });
+
+            this.activeReports.set(r.id, report);
+        }
     }
 
     private id: ServerReportDto['id'];
@@ -267,3 +317,5 @@ export class ServerReport {
         }
     }
 }
+
+ServerReport.loadFromDatabase();
