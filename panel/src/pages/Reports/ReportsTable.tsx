@@ -7,25 +7,24 @@ import { convertRowDateTime } from '@/lib/dateTime';
 import { TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 import { Loader2Icon, AlertCircleIcon, CheckCircle2Icon, TimerIcon, UserIcon } from 'lucide-react';
 import { useBackendApi } from '@/hooks/fetch';
+import { ReportsTablePlayerType } from '@shared/reportApiTypes';
+import { useOpenReportModal } from '@/hooks/reportModal';
 
 // Types adapted for Reports
 // You would define these in your @shared types file
-type ReportType = {
-    id: string;
-    subject: string;
-    reporter: {
-        license: string;
-        name: string;
-    };
-    status: 'open' | 'in-progress' | 'resolved';
-    tsOpened: number;
-    tsLastAction: number;
+type ReportRowProps = {
+    rowData: ReportsTablePlayerType;
+    modalOpener: ReturnType<typeof useOpenReportModal>;
 }
 
 /**
  * Report Row Component
  */
-function ReportRow({ rowData }: { rowData: ReportType }) {
+function ReportRow({ rowData, modalOpener }: ReportRowProps) {
+    const openModal = () => {
+        modalOpener({ reportId: rowData.id });
+    }
+
     const statusIcons = {
         'open': <AlertCircleIcon className="h-5 text-destructive-inline animate-pulse" />,
         'in-progress': <TimerIcon className="h-5 text-warning-inline" />,
@@ -33,7 +32,7 @@ function ReportRow({ rowData }: { rowData: ReportType }) {
     };
 
     return (
-        <TableRow className='cursor-pointer hover:bg-muted/50'>
+        <TableRow onClick={openModal} className='cursor-pointer hover:bg-muted/50'>
             <TableCell className='px-4 py-2 border-r font-medium'>
                 <div className='flex items-center gap-2'>
                     {statusIcons[rowData.status]}
@@ -62,11 +61,12 @@ function ReportRow({ rowData }: { rowData: ReportType }) {
  */
 export default function ReportsTable({ search, filters }: { search: any, filters: any }) {
     const scrollRef = useRef<HTMLDivElement>(null);
-    const [reports, setReports] = useState<ReportType[]>([]);
+    const [reports, setReports] = useState<ReportsTablePlayerType[]>([]);
     const [hasReachedEnd, setHasReachedEnd] = useState(false);
     const [isFetching, setIsFetching] = useState(true);
     const [loadError, setLoadError] = useState<string | null>(null);
     const [sorting, setSorting] = useState({ key: 'tsOpened', desc: true });
+    const openReportModal = useOpenReportModal();
 
     const reportsApi = useBackendApi<any>({
         method: 'GET',
@@ -138,7 +138,11 @@ export default function ReportsTable({ search, filters }: { search: any, filters
                                     </TableCell>
                                 </TableRow>
                             ) : (
-                                <ReportRow key={virtualItem.key} rowData={reports[virtualItem.index]} />
+                                <ReportRow
+                                    key={virtualItem.key}
+                                    rowData={reports[virtualItem.index]}
+                                    modalOpener={openReportModal}
+                                />
                             );
                         })}
                     </TableBody>
