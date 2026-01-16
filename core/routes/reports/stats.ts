@@ -1,7 +1,7 @@
 const modulename = 'WebServer:PlayersStats';
 import consoleFactory from '@lib/console';
+import { ServerReport } from '@modules/Report/class';
 import { AuthedCtx } from '@modules/WebServer/ctxTypes';
-import { PlayersStatsResp } from '@shared/playerApiTypes';
 import { ReportsStatsResp } from '@shared/reportApiTypes';
 const console = consoleFactory(modulename);
 
@@ -12,7 +12,7 @@ const console = consoleFactory(modulename);
 export default async function ReportsStats(ctx: AuthedCtx) {
     const sendTypedResp = (data: ReportsStatsResp) => ctx.send(data);
     try {
-        const stats = txCore.database.stats.getReportStats();
+        const stats = ServerReport.getStats();
         return sendTypedResp(stats);
     } catch (error) {
         const msg = `getStats failed with error: ${(error as Error).message}`;
