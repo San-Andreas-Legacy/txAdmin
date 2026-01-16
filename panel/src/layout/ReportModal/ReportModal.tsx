@@ -89,7 +89,7 @@ export default function ReportModal() {
                     
                     {modalData && (
                         <div className="flex gap-2 ml-4">
-                            <Button size="sm" variant="outline" className="h-8" onClick={() => openPlayerModal({ license: modalData.reporter.license })}>
+                            <Button size="sm" variant="outline" className="h-8" onClick={() => openPlayerModal({ license: modalData.reporter_license })}>
                                 <UserIcon className="h-4 w-4 mr-1.5" /> Player
                             </Button>
                             <Button size="sm" variant="destructive" className="h-8" onClick={handleCloseReport}>
@@ -111,10 +111,10 @@ export default function ReportModal() {
                     ) : (
                         <div className="flex flex-col gap-4">
                             {modalData.messages.map((msg, idx) => {
-                                const isReporter = msg.author.license === modalData.reporter.license;
+                                const isReporter = msg.author_license === modalData.reporter_license;
                                 return (
                                     <div key={idx} className={cn("flex flex-col max-w-[85%]", isReporter ? "self-start" : "self-end items-end")}>
-                                        <span className="text-[10px] uppercase font-bold text-muted-foreground mb-1 px-1">{msg.author.name}</span>
+                                        <span className="text-[10px] uppercase font-bold text-muted-foreground mb-1 px-1">{msg.author_name}</span>
                                         <div className={cn("p-3 rounded-2xl text-sm shadow-sm", isReporter ? "bg-secondary" : "bg-primary text-primary-foreground")}>
                                             {msg.message}
                                         </div>
