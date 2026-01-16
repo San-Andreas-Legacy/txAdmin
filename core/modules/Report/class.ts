@@ -44,17 +44,46 @@ export class ServerReport {
     }
 
     static getReport(id: string) {
-        const report = this.activeReports.get(id);
+        let report = this.activeReports.get(id);
 
-        return report ?? false;
+        if (report) return {
+            active: true,
+            report,
+        };
+
+        const dbReport = this.database.single<ServerReportDto>('SELECT * FROM reports WHERE id = ?', [id]);
+
+        if (!dbReport) return false;
+
+        const dbMessages = this.database.query<ServerReportMessage>(`
+            SELECT * FROM reports_messages
+            WHERE report_id = ?
+            ORDER BY timestamp ASC,`
+        );
+
+        report = new ServerReport({
+            id: dbReport.id,
+            reporter_license: dbReport.reporter_license,
+            reporter_name: dbReport.reporter_name,
+            subject: dbReport.subject,
+            status: dbReport.status as ServerReportStatus,
+            ts_opened: dbReport.ts_opened,
+            ts_lastaction: dbReport.ts_lastaction,
+            messages: dbMessages,
+        });
+
+        return {
+            active: false,
+            report,
+        };
     }
 
     static closeReport(id: string, author: ReportMember): ReportCloseResp {
-        const report = this.getReport(id);
+        const data = this.getReport(id);
 
-        if (!report) return { error: `No report found with id: ${id}` };
+        if (!data || !data.active) return { error: `No report found with id: ${id}` };
 
-        report.closeTicket(author);
+        data.report.closeTicket(author);
 
         this.activeReports.delete(id);
 
