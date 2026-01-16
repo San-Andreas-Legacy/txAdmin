@@ -40,13 +40,14 @@ export const numberToLocaleString = (num: number, decimals = 0) => {
 /**
  * Returns a socket.io client instance
  */
-export const getSocket = (rooms: string[] | string) => {
+export const getSocket = (rooms: string[] | string, customQuery = {}) => {
     const socketOpts = {
         transports: ['polling'],
         upgrade: false,
         query: {
             rooms,
             uiVersion: window.txConsts.txaVersion,
+            ...customQuery,
         }
     };
 
