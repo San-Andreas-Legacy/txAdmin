@@ -41,7 +41,7 @@ function ReportRow({ rowData, modalOpener }: ReportRowProps) {
             </TableCell>
             <TableCell className='px-4 py-2 border-r'>
                 <div className='flex flex-col'>
-                    <span>{rowData.reporter.name}</span>
+                    <span>{rowData.reporter_name}</span>
                 </div>
             </TableCell>
             <TableCell className='px-4 py-2 border-r max-w-[200px]'>
@@ -50,7 +50,7 @@ function ReportRow({ rowData, modalOpener }: ReportRowProps) {
                 </span>
             </TableCell>
             <TableCell className='px-4 py-2 text-right'>
-                {convertRowDateTime(rowData.tsLastAction)}
+                {convertRowDateTime(rowData.ts_lastaction)}
             </TableCell>
         </TableRow>
     );
@@ -87,7 +87,7 @@ export default function ReportsTable({ search, filters }: { search: any, filters
             };
             
             if (!resetOffset && reports.length) {
-                queryParams.offsetParam = reports[reports.length - 1].tsLastAction;
+                queryParams.offsetParam = reports[reports.length - 1].ts_lastaction;
                 queryParams.offsetId = reports[reports.length - 1].id;
             }
 
