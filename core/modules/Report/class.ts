@@ -1,6 +1,8 @@
 import { DB } from "@modules/SqlLiteDatabase";
-import { ServerReportDto, ServerReportStatus } from "@shared/reportApiTypes";
+import { ReportCloseResp, ReportsTableSearchResp, ServerReportDto, ServerReportStatus } from "@shared/reportApiTypes";
 import { randomUUID } from "crypto";
+
+const DEFAULT_LIMIT = 100;
 
 export type ReportMember = {
     name: string;
@@ -47,7 +49,7 @@ export class ServerReport {
         return report ?? false;
     }
 
-    static closeReport(id: string, author: ReportMember) {
+    static closeReport(id: string, author: ReportMember): ReportCloseResp {
         const report = this.getReport(id);
 
         if (!report) return { error: `No report found with id: ${id}` };
@@ -55,6 +57,89 @@ export class ServerReport {
         report.closeTicket(author);
 
         return { success: true };
+    }
+
+    /**
+     * Search and filter reports from the database
+     */
+    static searchReports(
+        searchValue?: string,
+        searchType?: string,
+        filters?: string,
+        sortingKey: string = 'ts_opened',
+        sortingDesc: boolean = true,
+        offsetParam?: string
+    ): ReportsTableSearchResp {
+        let sql = `SELECT * FROM reports WHERE 1=1`;
+        const params: any[] = [];
+
+        // 1. Status Filtering
+        if (filters && filters.length) {
+            const validFilters = filters.split(',').map(f => {
+                if (f === 'statusOpen') return ServerReportStatus.OPEN;
+                if (f === 'statusInProgress') return ServerReportStatus.INPROGRESS;
+                if (f === 'statusResolved') return ServerReportStatus.RESOLVED;
+                return null;
+            }).filter(Boolean);
+
+            if (validFilters.length) {
+                const placeholders = validFilters.map(() => '?').join(',');
+                sql += ` AND status IN (${placeholders})`;
+                params.push(...validFilters);
+            }
+        }
+
+        // 2. Simple Search (SQL LIKE)
+        if (searchValue && searchValue.trim().length) {
+            if (searchType === 'subject') {
+                sql += ` AND subject LIKE ?`;
+                params.push(`%${searchValue}%`);
+            } else if (searchType === 'reporter') {
+                sql += ` AND (reporter_name LIKE ? OR reporter_license LIKE ?)`;
+                params.push(`%${searchValue}%`, `%${searchValue}%`);
+            }
+        }
+
+        // 3. Sorting & Pagination Logic
+        // Map incoming sorting key to DB column name
+        const dbSortKey = sortingKey === 'tsLastAction' ? 'ts_lastaction' : 'ts_opened';
+        
+        if (offsetParam) {
+            const parsedOffset = parseInt(offsetParam);
+            if (!isNaN(parsedOffset)) {
+                const operator = sortingDesc ? '<' : '>';
+                sql += ` AND ${dbSortKey} ${operator} ?`;
+                params.push(parsedOffset);
+            }
+        }
+
+        const direction = sortingDesc ? 'DESC' : 'ASC';
+        sql += ` ORDER BY ${dbSortKey} ${direction} LIMIT ?`;
+        params.push(DEFAULT_LIMIT + 1);
+
+        // 4. Execution
+        const rows = this.database.query<any>(sql, params);
+        const hasReachedEnd = rows.length <= DEFAULT_LIMIT;
+        const reportsData = rows.slice(0, DEFAULT_LIMIT);
+
+        // 5. Mapping to ServerReportDto
+        // Since the 'reports' table doesn't have messages, we return an empty array for the list
+        // or you can perform a secondary query if messages are needed in the table view.
+        const reports: ServerReportDto[] = reportsData.map(r => ({
+            id: r.id,
+            reporter_license: r.reporter_license,
+            reporter_name: r.reporter_name,
+            subject: r.subject,
+            status: r.status as ServerReportStatus,
+            messages: [], // Typically messages aren't needed for the table list view
+            ts_opened: r.ts_opened,
+            ts_lastaction: r.ts_lastaction,
+        }));
+
+        return {
+            reports,
+            hasReachedEnd
+        };
     }
 
     static getStats() {
