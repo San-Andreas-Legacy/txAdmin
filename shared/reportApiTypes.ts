@@ -107,16 +107,18 @@ export enum ServerReportStatus {
 
 export interface ServerReportMessage {
     message: string;
-    ts: number;
-    author: ReportMember;
+    timestamp: number;
+    author_license: string;
+    author_name: string;
 }
 
 export interface ServerReportDto {
     id: string;
-    reporter: ReportMember;
+    reporter_license: string;
+    reporter_name: string;
     subject: string;
     status: ServerReportStatus;
     messages: ServerReportMessage[];
-    tsOpened: number;
-    tsLastAction: number;
+    ts_opened: number;
+    ts_lastaction: number;
 }
