@@ -14,9 +14,14 @@ export default {
         const reportId = query?.reportId;
         if (!reportId) return { error: 'No report ID provided' };
         
-        const report = ServerReport.getReport(reportId);
+        const reportData = ServerReport.getReport(reportId);
 
-        if (!report) return { error: 'Report not found' };
-        return report.getData();
+        if (!reportData) return { error: `Report (${reportId}) not found` };
+
+        const { report, active } = reportData;
+        return {
+            report: report.getData(),
+            active,
+        }
     },
 } satisfies RoomType;
