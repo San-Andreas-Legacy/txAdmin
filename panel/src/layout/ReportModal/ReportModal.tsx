@@ -8,6 +8,7 @@ import GenericSpinner from "@/components/GenericSpinner";
 import { cn, getSocket } from "@/lib/utils";
 import { useBackendApi } from "@/hooks/fetch";
 import { ServerReportDto } from "@shared/reportApiTypes";
+import { ReportInitialData } from "@shared/socketioTypes";
 
 export default function ReportModal() {
     const { isModalOpen, closeModal, reportRef } = useReportModalStateValue();
@@ -15,6 +16,7 @@ export default function ReportModal() {
     
     // modalData now starts as undefined and is filled by the WS initialData
     const [modalData, setModalData] = useState<ServerReportDto | undefined>(undefined);
+    const [activeTicket, setActiveTicket] = useState<boolean>(false);
     const [modalError, setModalError] = useState('');
     
     const pageSocket = useRef<ReturnType<typeof getSocket> | null>(null);
@@ -40,11 +42,12 @@ export default function ReportModal() {
         });
 
         // Listen for the initial snapshot sent by the room
-        pageSocket.current.on('report', (data: any) => {
-            if (data.error) {
+        pageSocket.current.on('report', (data: ReportInitialData) => {
+            if ('error' in data) {
                 setModalError(data.error);
             } else {
-                setModalData(data);
+                setModalData(data.report);
+                setActiveTicket(data.active);
             }
         });
 
@@ -77,11 +80,10 @@ export default function ReportModal() {
     return (
         <Dialog open={isModalOpen} onOpenChange={(open) => !open && closeModal()}>
             <DialogContent className="max-w-2xl h-full sm:h-[600px] p-0 flex flex-col gap-0">
-                <DialogHeader className="px-4 py-3 border-b flex flex-row items-center justify-between space-y-0">
+                <DialogHeader className="px-4 py-3 mr-8 border-b flex flex-row items-center justify-between space-y-0">
                     <DialogTitle className="tracking-wide line-clamp-1 break-all flex-1">
                         {modalData ? (
                             <div className="flex items-center gap-2">
-                                <span className="text-muted-foreground font-mono text-sm">#{modalData.id}</span>
                                 <span>{modalData.subject}</span>
                             </div>
                         ) : "Connecting..."}
