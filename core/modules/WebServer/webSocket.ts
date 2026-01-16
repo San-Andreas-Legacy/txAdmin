@@ -6,10 +6,12 @@ import dashboardRoom from './wsRooms/dashboard';
 import playerlistRoom from './wsRooms/playerlist';
 import liveconsoleRoom from './wsRooms/liveconsole';
 import serverlogRoom from './wsRooms/serverlog';
+import reportsRoom from './wsRooms/reports';
 import { AuthedAdminType, checkRequestAuth } from './authLogic';
 import { SocketWithSession } from './ctxTypes';
 import { isIpAddressLocal } from '@lib/host/isIpAddressLocal';
 import { txEnv } from '@core/globalData';
+import { ServerReportMessage } from '@shared/reportApiTypes';
 const console = consoleFactory(modulename);
 
 //Types
@@ -24,11 +26,11 @@ export type RoomType = {
     cumulativeBuffer: boolean;
     outBuffer: any;
     commands?: Record<string, RoomCommandHandlerType>;
-    initialData: () => any;
+    initialData: (socketQuery?: any) => any;
 }
 
 //NOTE: quen adding multiserver, create dynamic rooms like playerlist#<svname>
-const VALID_ROOMS = ['status', 'dashboard', 'liveconsole', 'serverlog', 'playerlist'] as const;
+const VALID_ROOMS = ['status', 'dashboard', 'liveconsole', 'serverlog', 'playerlist', 'report'] as const;
 type RoomNames = typeof VALID_ROOMS[number];
 
 
@@ -71,6 +73,7 @@ export default class WebSocket {
             playerlist: playerlistRoom,
             liveconsole: liveconsoleRoom,
             serverlog: serverlogRoom,
+            report: reportsRoom,
         };
 
         setInterval(this.flushBuffers.bind(this), 250);
@@ -195,9 +198,25 @@ export default class WebSocket {
                     }
                 }
 
-                //Sending initial data
-                socket.join(requestedRoomName);
-                socket.emit(room.eventName, room.initialData());
+                if (requestedRoomName === 'report') {
+                    const reportId = socket.handshake.query.reportId;
+                    if (!reportId) {
+                        console.verbose.warn('SocketIO', 'Client tried to join report room without reportId');
+                        continue;
+                    }
+                    
+                    // Join a unique sub-room for this specific report ID
+                    const specificRoomPath = `report#${reportId}`;
+                    socket.join(specificRoomPath);
+                    
+                    // Send initial data specific to this ID
+                    // We pass the whole query so the room logic can extract what it needs
+                    socket.emit(room.eventName, room.initialData(socket.handshake.query));
+                } else {
+                    // Standard Global Room Joining
+                    socket.join(requestedRoomName);
+                    socket.emit(room.eventName, room.initialData());
+                }
             }
 
             //General events
@@ -289,5 +308,13 @@ export default class WebSocket {
      */
     pushEvent<T>(name: string, data: T) {
         this.#eventBuffer.push({ name, data });
+    }
+
+    /**
+     * Sends a new message to a specific report sub-room
+     */
+    public sendReportMessage(reportId: string, message: ServerReportMessage) {
+        const roomPath = `report#${reportId}`;
+        this.#io.to(roomPath).emit('reportMessage', message);
     }
 };
