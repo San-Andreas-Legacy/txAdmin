@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useEventListener } from 'usehooks-ts';
 import MainRouter from "./MainRouter";
 import { useExpireAuthData } from '../hooks/auth';
@@ -10,18 +11,19 @@ import ConfirmDialog from '@/components/ConfirmDialog';
 import PromptDialog from '@/components/PromptDialog';
 import TxToaster from '@/components/TxToaster';
 import AccountDialog from '@/components/AccountDialog';
-import { useOpenAccountModal } from '@/hooks/dialogs';
-import PlayerModal from './PlayerModal/PlayerModal';
-import { playerModalUrlParam, useOpenPlayerModal } from '@/hooks/playerModal';
 import { navigate as setLocation } from 'wouter/use-browser-location';
 import MainSocket from './MainSocket';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { useToggleTheme } from '@/hooks/theme';
 import { hotkeyEventListener } from '@/lib/hotkeyEventListener';
 import BreakpointDebugger from '@/components/BreakpointDebugger';
-import ActionModal from './ActionModal/ActionModal';
-import { useEffect } from 'react';
+
 import { actionModalUrlParam, useOpenActionModal } from '@/hooks/actionModal';
+import { useOpenAccountModal } from '@/hooks/dialogs';
+import { playerModalUrlParam, useOpenPlayerModal } from '@/hooks/playerModal';
+import ReportModal from './ReportModal/ReportModal';
+import PlayerModal from './PlayerModal/PlayerModal';
+import ActionModal from './ActionModal/ActionModal';
 
 
 export default function MainShell() {
@@ -94,6 +96,7 @@ export default function MainShell() {
             <TxToaster />
             <AccountDialog />
             <PlayerModal />
+            <ReportModal />
             <ActionModal />
             <MainSocket />
             {/* <BreakpointDebugger /> */}
