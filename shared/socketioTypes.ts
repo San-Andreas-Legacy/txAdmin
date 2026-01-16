@@ -99,6 +99,10 @@ export type UpdateAvailableEventType = {
     txadmin?: UpdateDataType;
 }
 
+export type ReportInitialData = {
+    report: ServerReportDto,
+    active: boolean,
+} | { error: string };
 
 /**
  * Listen Events Map
@@ -113,7 +117,7 @@ export type ListenEventsMap = {
     updateAuthData: (authData: ReactAuthDataType) => void;
     consoleData: (data: string) => void;
     dashboard: (data: DashboardDataEventType) => void;
-    report: (data: ServerReportDto) => void;
+    report: (data: ReportInitialData) => void;
     reportMessage: (data: ServerReportMessage) => void;
 
     //Standalone events
