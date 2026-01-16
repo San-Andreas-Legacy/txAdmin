@@ -51,15 +51,18 @@ export class ServerReport {
             report,
         };
 
-        const dbReport = this.database.single<ServerReportDto>('SELECT * FROM reports WHERE id = ?', [id]);
+        const dbReport = this.database.single<ServerReportDto>('SELECT * FROM reports WHERE id = ?', [ id ]);
 
         if (!dbReport) return false;
 
         const dbMessages = this.database.query<ServerReportMessage>(`
             SELECT * FROM reports_messages
             WHERE report_id = ?
-            ORDER BY timestamp ASC,`
+            ORDER BY timestamp ASC;`,
+            [ id ]
         );
+
+        console.log('dbMessages', dbMessages);
 
         report = new ServerReport({
             id: dbReport.id,
