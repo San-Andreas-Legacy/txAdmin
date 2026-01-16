@@ -57,6 +57,24 @@ export class ServerReport {
         return { success: true };
     }
 
+    static getStats() {
+        const response = this.database.single<{
+            total: number;
+            resolved: number;
+            unanswered: number;
+            inprogress: number;
+        }>(`
+            SELECT
+                COUNT(*) FILTER (WHERE status = 'open') AS unanswered,
+                COUNT(*) FILTER (WHERE status = 'in-progress') AS inprogress,
+                COUNT(*) FILTER (WHERE status = 'resolved') AS resolved,
+                COUNT(*) AS total
+            FROM reports;`
+        );
+
+        return response;
+    }
+
     private id: ServerReportDto['id'];
     private reporter_license: ServerReportDto['reporter_license'];
     private reporter_name: ServerReportDto['reporter_name'];
