@@ -166,7 +166,6 @@ export class DbInstance {
             if (
                 !Array.isArray(this.obj!.data.actions)
                 || !Array.isArray(this.obj!.data.players)
-                || !Array.isArray(this.obj!.data.reports)
                 || !Array.isArray(this.obj!.data.whitelistApprovals)
                 || !Array.isArray(this.obj!.data.whitelistRequests)
             ) {

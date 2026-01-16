@@ -8,7 +8,6 @@ import WhitelistDao from './dao/whitelist';
 import StatsDao from './dao/stats';
 import CleanupDao from './dao/cleanup';
 import { TxConfigState } from '@shared/enums';
-import ReportssDao from './dao/reports';
 const console = consoleFactory(modulename);
 
 
@@ -20,7 +19,6 @@ export default class Database {
 
     //Database Methods
     readonly players: PlayersDao;
-    readonly reports: ReportssDao;
     readonly actions: ActionsDao;
     readonly whitelist: WhitelistDao;
     readonly stats: StatsDao;
@@ -29,7 +27,6 @@ export default class Database {
     constructor() {
         this.#db = new DbInstance();
         this.players = new PlayersDao(this.#db);
-        this.reports = new ReportssDao(this.#db);
         this.actions = new ActionsDao(this.#db);
         this.whitelist = new WhitelistDao(this.#db);
         this.stats = new StatsDao(this.#db);
