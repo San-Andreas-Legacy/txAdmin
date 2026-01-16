@@ -57,6 +57,13 @@ export type ReportsStatsResp = {
     inprogress: number;
 } | GenericApiErrorResp;
 
+/**
+ * Used in the report page
+ */
+export type ReportCloseResp = {
+    success: true;
+} | GenericApiErrorResp;
+
 
 export type ReportTableSearchType = {
     value: string;
@@ -81,18 +88,7 @@ export type ReportsTableReqType = {
     }
 };
 
-export type ReportsTablePlayerType = {
-    id: string;
-    subject: string;
-    reporter: {
-        license: string;
-        name: string;
-        online: boolean;
-    };
-    status: 'open' | 'in-progress' | 'resolved';
-    tsOpened: number;
-    tsLastAction: number;
-}
+export type ReportsTablePlayerType = ServerReportDto;
 
 export type ReportsTableSearchResp = {
     reports: ReportsTablePlayerType[];
