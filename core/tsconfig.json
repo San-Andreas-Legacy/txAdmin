@@ -4,16 +4,16 @@
     "composite": true,
 
     /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "target": "es2021",
+    "target": "ES2022",
 
     /* Specify what module code is generated. */
-    "module": "ES2020",
+    "module": "NodeNext",
 
     /* Specify the root folder within your source files. */
     "rootDir": "../",
 
     /* Specify how TypeScript looks up a file from a given module specifier. */
-    "moduleResolution": "bundler",
+    "moduleResolution": "Bundler",
 
     /* Specify the base directory to resolve non-relative module names. */
     "baseUrl": "./",
@@ -41,7 +41,7 @@
     "esModuleInterop": true,
 
     /* Specify library files to be included in the compilation. */
-    "lib": ["ES2021"], //@tsconfig/node16
+    "lib": ["ES2022"], //@tsconfig/node16
 
     /* Specify type declaration files to be included in compilation. */
     "types": ["node"],

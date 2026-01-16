@@ -26,7 +26,7 @@ try {
         bundle: true,
         outfile: './dist/core/index.js',
         platform: 'node',
-        target: 'node16',
+        target: 'node22',
         format: 'cjs', //typescript builds to esm and esbuild converts it to cjs
         minifyWhitespace: true,
         charset: 'utf8',
