@@ -305,7 +305,7 @@ export class ServerReport {
         this.ts_lastaction = timestamp;
 
         ServerReport.database.insert('reports_messages', {
-            report: this.id,
+            report_id: this.id,
             author_license: author.license,
             author_name: author.name,
             message: message,
