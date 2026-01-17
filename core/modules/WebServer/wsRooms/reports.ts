@@ -29,14 +29,9 @@ export default {
         newMessage: {
             permission: 'menu.reports',
             handler: (admin: AuthedAdminType, reportId: string, message: string) => {
-                console.log('reports socket newMessage', reportId, message);
                 if(typeof reportId !== 'string' || !reportId) return;
 
-                console.log('new message for report', reportId, message, admin.name);
-
                 const report = ServerReport.getReport(reportId);
-
-                console.log('report found', report !== false);
 
                 if (!report) return;
 
