@@ -188,9 +188,20 @@ export default class WebSocket {
                 for (const [commandName, commandData] of Object.entries(room.commands ?? [])) {
                     if (commandData.permission === true || authedAdmin.hasPermission(commandData.permission)) {
                         socket.on(commandName, (...args) => {
-                            //Checking if admin is still in the room - perms change can make them be kicked out of room
-                            if (socket.rooms.has(requestedRoomName)) {
-                                commandData.handler(authedAdmin, ...args);
+                            // NOTE: not sure if this is best, the report sub-rooms ids are different
+                            // from the requestedRoom value so it'll never fullfill the action
+                            // So hacking around at it works
+
+                            const currentRooms = Array.from(socket.rooms);
+                            const isInRoom = currentRooms.some(r => r === requestedRoomName || r.startsWith(`${requestedRoomName}#`));
+
+                            if (isInRoom) {                                
+                                if (typeof args[0] === 'object' && args[0].reportId) {
+                                    const { reportId, message } = args[0];
+                                    commandData.handler(authedAdmin, reportId, message);
+                                } else {
+                                    commandData.handler(authedAdmin, ...args);
+                                }
                             } else {
                                 console.verbose.debug('SocketIO', `Command '${requestedRoomName}#${commandName}' was ignored due to admin not being in the room.`);
                             }
