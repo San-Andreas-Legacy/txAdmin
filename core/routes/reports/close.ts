@@ -9,7 +9,7 @@ const console = consoleFactory(modulename);
 /**
  *  Returns the players stats for the Players page callouts
  */
-export default async function ReportsStats(ctx: AuthedCtx) {
+export default async function ReportsClose(ctx: AuthedCtx) {
     const { reportId } = ctx.query;
     const { name: adminName } = ctx.admin.getAuthData();
     const sendTypedResp = (data: ReportCloseResp) => ctx.send(data);

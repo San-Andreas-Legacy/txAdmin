@@ -116,6 +116,7 @@ export default () => {
     //Report routes
     router.get('/reports/stats', apiAuthMw, routes.report_stats);
     router.get('/reports/search', apiAuthMw, routes.report_search);
+    router.get('/reports/close', apiAuthMw, routes.report_close);
 
     //Host routes
     router.get('/host/status', hostAuthMw, routes.host_status);

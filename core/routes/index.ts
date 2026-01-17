@@ -61,6 +61,7 @@ export { default as player_checkJoin } from './player/checkJoin';
 
 export { default as report_stats } from './reports/stats';
 export { default as report_search } from './reports/search';
+export { default as report_close } from './reports/close';
 
 export { default as whitelist_page } from './whitelist/page';
 export { default as whitelist_list } from './whitelist/list';
