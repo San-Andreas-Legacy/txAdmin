@@ -51,30 +51,6 @@ export default class StatsDao {
     /**
      * Returns players stats for the database (for Players page callouts)
      */
-    getReportStats() {
-        const startingValue = {
-            total: 0,
-            resolved: 0,
-            inprogress: 0,
-            unanswered: 0,
-        };
-        const reportStats = this.chain.get('reports')
-            .reduce((acc, r, ind) => {
-                acc.total++;
-                if (r.status === 'open') acc.inprogress++;
-                if (r.status === 'resolved') acc.resolved++;
-                if (r.status === 'in-progress') acc.inprogress++;
-                return acc;
-            }, startingValue)
-            .value();
-
-        return reportStats;
-    }
-
-
-    /**
-     * Returns players stats for the database (for Players page callouts)
-     */
     getActionStats() {
         const sevenDaysAgo = now() - (7 * 24 * 60 * 60);
         const startingValue = {
