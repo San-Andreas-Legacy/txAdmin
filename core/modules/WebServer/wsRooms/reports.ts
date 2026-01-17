@@ -1,5 +1,6 @@
 import { ServerReport } from "@modules/Report/class";
 import type { RoomType } from "../webSocket";
+import { AuthedAdminType } from "../authLogic";
 
 /**
  * The Reports Room
@@ -24,4 +25,31 @@ export default {
             active,
         }
     },
+    commands: {
+        newMessage: {
+            permission: 'menu.reports',
+            handler: (admin: AuthedAdminType, reportId: string, message: string) => {
+                console.log('reports socket newMessage', reportId, message);
+                if(typeof reportId !== 'string' || !reportId) return;
+
+                console.log('new message for report', reportId, message, admin.name);
+
+                const report = ServerReport.getReport(reportId);
+
+                console.log('report found', report !== false);
+
+                if (!report) return;
+
+                report.report.newMessage(
+                    message,
+                    {
+                        name: admin.name,
+                        license: 'web-admin',
+                    },
+                    true
+                );
+            }
+
+        }
+    }
 } satisfies RoomType;
