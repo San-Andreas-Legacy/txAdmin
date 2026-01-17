@@ -1,3 +1,4 @@
+import { SYM_SYSTEM_AUTHOR } from "@lib/symbols";
 import { DB } from "@modules/SqlLiteDatabase";
 import { ReportCloseResp, ReportsTableSearchResp, ServerReportDto, ServerReportMessage, ServerReportStatus } from "@shared/reportApiTypes";
 import { randomUUID } from "crypto";
@@ -327,6 +328,13 @@ export class ServerReport {
             author_license: author.license,
             author_name: author.name,
         });
+        // NOTE: think this is the correct method to send it to the lua
+        // SCRT to notify player of new message, still needs some looking into
+        txCore.fxRunner.sendRawCommand(`newReportMessage ${JSON.stringify({
+            reportId: this.id,
+            author: author.name,
+            message,
+        })}`, SYM_SYSTEM_AUTHOR);
     }
 
     closeTicket(author: ReportMember) {
