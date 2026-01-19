@@ -7,9 +7,11 @@ import {
 } from "recoil";
 import { ReportData, ServerReportStatus } from "../hooks/useReportListListener";
 import { debugData } from "../utils/debugData";
+import { Report } from "@mui/icons-material";
 
 export enum ReportDataFilter {
   All = "all",
+  Active = "active",
   Open = "open",
   InProgress = "in-progress",
   Resolved = "resolved",
@@ -49,7 +51,10 @@ const reportsState = {
         const matchesSearch = r.subject.toLowerCase().includes(searchInput) || 
                               r.reporter_name.toLowerCase().includes(searchInput);
         
-        const matchesStatus = filterType === ReportDataFilter.All || r.status === filterType;
+        let matchesStatus;
+        if (filterType === ReportDataFilter.All) matchesStatus = true;
+        else if (filterType === ReportDataFilter.Active) matchesStatus = [ReportDataFilter.Open, ReportDataFilter.InProgress].includes(r.status);
+        else matchesStatus = r.status === filterType;
         
         return matchesSearch && matchesStatus;
       });
