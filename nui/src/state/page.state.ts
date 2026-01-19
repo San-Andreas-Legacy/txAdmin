@@ -8,6 +8,7 @@ import {
 export enum txAdminMenuPage {
   Main,
   Players,
+  Reports,
   IFrame,
   PlayerModalOnly,
 }
