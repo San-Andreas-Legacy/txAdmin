@@ -244,6 +244,28 @@
                 "health": "%{percentHealth}% health"
             }
         },
+        "page_report": {
+            "admin": {
+                "misc": {
+                    "search": "Search",
+                    "reports": "reports",
+                    "tabtitle": "Player Reports",
+                    "noreports": "No reports"
+                },
+                "filter": {
+                    "label": "Filter by",
+                    "all": "All Reports",
+                    "open": "Open",
+                    "inprogress": "In Progress",
+                    "resolved": "Resolved"
+                },
+                "sort": {
+                    "label": "Sort by",
+                    "openedat": "Opened At",
+                    "lastaction": "Last Action"
+                }
+            }
+        },
         "player_modal": {
             "misc": {
                 "error": "An error occurred fetching this users details. The error is shown below:",
