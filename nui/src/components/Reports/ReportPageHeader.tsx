@@ -67,7 +67,7 @@ export const ReportPageHeader: React.FC = () => {
         </TypographyCount>
       </Box>
       
-            <Box display="flex" alignItems="center" justifyContent="center" gap={3}>
+      <Box display="flex" alignItems="center" justifyContent="center" gap={3}>
         <TextFieldInputs
           label={t("nui_menu.page_report.admin.misc.search")}
           value={searchVal}
