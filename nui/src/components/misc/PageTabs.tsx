@@ -7,8 +7,10 @@ import { useIsMenuVisibleValue } from "../../state/visibility.state";
 import { useServerCtxValue } from "../../state/server.state";
 
 const StyledTab = styled(Tab)({
-  letterSpacing: '0.1em',
-  minWidth: 100,
+  letterSpacing: '0.05em',
+  minWidth: 70,
+  fontSize: '0.75rem',
+  padding: '6px 8px',
 });
 
 export const PageTabs: React.FC = () => {
@@ -35,6 +37,7 @@ export const PageTabs: React.FC = () => {
       >
         <StyledTab label="Main" wrapped disableFocusRipple />
         <StyledTab label="Players" wrapped disableFocusRipple />
+        <StyledTab label="Reports" wrapped disableFocusRipple />
         <StyledTab label="txAdmin" wrapped disableFocusRipple />
       </Tabs>
     </Box>
