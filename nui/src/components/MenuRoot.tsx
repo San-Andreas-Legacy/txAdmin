@@ -1,6 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
 import { PlayersPage } from "./PlayersPage/PlayersPage";
+import { ReportsPageAdmin } from "./Reports/ReportsPageAdmin";
 import { IFramePage } from "./IFramePage/IFramePage";
 import { txAdminMenuPage, usePageValue } from "../state/page.state";
 import { useHudListenersService } from "../hooks/useHudListenersService";
@@ -31,6 +32,7 @@ const MenuRoot: React.FC = () => {
       </Box>
       <PlayersPage visible={curPage === txAdminMenuPage.Players} />
       <IFramePage visible={curPage === txAdminMenuPage.IFrame} />
+      <ReportsPageAdmin visible={curPage === txAdminMenuPage.Reports} />
     </>
   );
 };
