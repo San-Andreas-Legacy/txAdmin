@@ -114,59 +114,46 @@ const PlayerCard: React.FC<{ playerData: PlayerData }> = ({ playerData }) => {
   return (
     <StyledBox p={1}>
       <div onClick={handlePlayerClick}>
-        <Paper className={classes.paper}>
-          <Box display="flex" alignItems="center" pb="5px">
-            <Box flexGrow={1} display="flex" overflow="hidden">
+        <Paper className={classes.paper} elevation={1}>
+          <Box display="flex" alignItems="center" pb="8px" justifyContent="space-between">
+            <Box display="flex" alignItems="center" overflow="hidden">
               <Tooltip
                 title={upperCaseStatus}
                 placement="top"
                 arrow
-                classes={{
-                  tooltip: classes.tooltipOverride,
-                }}
+                classes={{ tooltip: classes.tooltipOverride }}
               >
                 <span className={classes.icon}>
                   {statusIcon[playerData.vType]}
                 </span>
               </Tooltip>
               <Typography
-                style={{ marginRight: 5 }}
-                variant="subtitle1"
-                color="textSecondary"
-              >
-                {playerData.id}
-              </Typography>
-              <Typography variant="subtitle1" color="textSecondary">
-                |
-              </Typography>
-              <Typography
-                style={{ marginLeft: 5 }}
                 noWrap
                 variant="subtitle1"
                 color="textPrimary"
+                style={{ fontWeight: 600 }}
               >
-                {playerData.admin && "🛡️"} {playerData.displayName}
-              </Typography>
-              <Typography
-                style={{ marginLeft: 7, minWidth: "fit-content" }}
-                noWrap
-                variant="subtitle1"
-                color="textSecondary"
-              >
-                {playerData.dist < 0 ? `?? m` : formatDistance(playerData.dist)}
+                {playerData.displayName}
               </Typography>
             </Box>
+
+            {playerData.admin && (
+              <Box ml={1} display="flex" alignItems="center">
+                <Tooltip title="Admin" placement="top" arrow>
+                  <Typography style={{ fontSize: '1.1rem' }}>🛡️</Typography>
+                </Tooltip>
+              </Box>
+            )}
           </Box>
-          <div>
+
+          <Box pb="12px">
             <Tooltip
               title={t("nui_menu.page_players.card.health", {
                 percentHealth: playerData.health ?? '0',
               })}
               placement="bottom"
               arrow
-              classes={{
-                tooltip: classes.tooltipOverride,
-              }}
+              classes={{ tooltip: classes.tooltipOverride }}
             >
               <HealthBarBackground healthVal={playerData.health}>
                 <HealthBar
@@ -175,7 +162,30 @@ const PlayerCard: React.FC<{ playerData: PlayerData }> = ({ playerData }) => {
                 />
               </HealthBarBackground>
             </Tooltip>
-          </div>
+          </Box>
+
+          <Box 
+            display="flex" 
+            justifyContent="space-between" 
+            alignItems="center"
+            pt="8px"
+            style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+          >
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              style={{ fontFamily: 'monospace', opacity: 0.6 }}
+            >
+              ID: {playerData.id}
+            </Typography>
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              style={{ opacity: 0.8 }}
+            >
+              {playerData.dist < 0 ? `?? m` : formatDistance(playerData.dist)}
+            </Typography>
+          </Box>
         </Paper>
       </div>
     </StyledBox>
