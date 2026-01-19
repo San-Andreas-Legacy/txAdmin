@@ -255,6 +255,7 @@
                 "filter": {
                     "label": "Filter by",
                     "all": "All Reports",
+                    "active": "Active",
                     "open": "Open",
                     "inprogress": "In Progress",
                     "resolved": "Resolved"
