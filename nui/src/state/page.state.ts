@@ -11,6 +11,7 @@ export enum txAdminMenuPage {
   Reports,
   IFrame,
   PlayerModalOnly,
+  ReportModalOnly,
 }
 
 const pageState = atom<txAdminMenuPage>({
