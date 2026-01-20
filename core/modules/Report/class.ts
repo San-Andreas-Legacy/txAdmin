@@ -296,13 +296,15 @@ export class ServerReport {
 
     newMessage(message: string, author: ReportMember, isAdmin: boolean = false) {
         const timestamp = Date.now();
-        
-        this.messages.push({
+
+        const msgPayload = {
             message,
             author_license: author.license,
             author_name: author.name,
             timestamp
-        });
+        };
+        
+        this.messages.push(msgPayload);
         this.ts_lastaction = timestamp;
 
         ServerReport.database.insert('reports_messages', {
@@ -332,9 +334,12 @@ export class ServerReport {
         // SCRT to notify player of new message, still needs some looking into
         txCore.fxRunner.sendRawCommand(`newReportMessage ${JSON.stringify({
             reportId: this.id,
-            author: author.name,
+            author_name: author.name,
+            author_license: author.license,
             message,
         })}`, SYM_SYSTEM_AUTHOR);
+
+        return msgPayload;
     }
 
     closeTicket(author: ReportMember) {
