@@ -64,6 +64,15 @@ export type ReportCloseResp = {
     success: true;
 } | GenericApiErrorResp;
 
+export type GetReportModalResp = {
+    success: true;
+    report: ServerReportDto;
+} | GenericApiErrorResp;
+
+export type SendReportModalResp = {
+    success: true;
+    message: ServerReportMessage;
+} | GenericApiErrorResp;
 
 export type ReportTableSearchType = {
     value: string;
