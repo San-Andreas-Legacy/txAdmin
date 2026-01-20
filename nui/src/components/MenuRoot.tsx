@@ -9,6 +9,10 @@ import { HelpTooltip } from "./misc/HelpTooltip";
 import { useServerCtxValue } from "../state/server.state";
 import { MenuRootContent } from "@nui/src/components/MenuRootContent";
 
+const skipMenuDisplay = [
+  txAdminMenuPage.PlayerModalOnly,
+  txAdminMenuPage.ReportModalOnly,
+];
 
 const MenuRoot: React.FC = () => {
   // We need to mount this here so we can get access to
@@ -17,7 +21,8 @@ const MenuRoot: React.FC = () => {
   const curPage = usePageValue();
   const serverCtx = useServerCtxValue()
 
-  if (curPage === txAdminMenuPage.PlayerModalOnly) return null;
+  if (skipMenuDisplay.includes(curPage)) return null;
+
   return (
     <>
       <Box
