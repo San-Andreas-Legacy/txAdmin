@@ -114,6 +114,8 @@ export default () => {
     router.post('/whitelist/:table/:action', apiAuthMw, routes.whitelist_actions);
 
     //Report routes
+    router.get('/reports', apiAuthMw, routes.report_get_modal);
+    router.get('/reports/message', apiAuthMw, routes.report_send_message);
     router.get('/reports/stats', apiAuthMw, routes.report_stats);
     router.get('/reports/search', apiAuthMw, routes.report_search);
     router.get('/reports/close', apiAuthMw, routes.report_close);
