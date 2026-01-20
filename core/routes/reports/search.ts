@@ -1,4 +1,4 @@
-const modulename = 'WebServer:ReportsTableSearch';
+const modulename = 'WebServer:ReportsSearch';
 import consoleFactory from '@lib/console';
 import { AuthedCtx } from '@modules/WebServer/ctxTypes';
 import { ServerReport } from '@modules/Report/class';

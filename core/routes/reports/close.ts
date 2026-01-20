@@ -1,4 +1,4 @@
-const modulename = 'WebServer:PlayersStats';
+const modulename = 'WebServer:ReportsClose';
 import consoleFactory from '@lib/console';
 import { ServerReport } from '@modules/Report/class';
 import { AuthedCtx } from '@modules/WebServer/ctxTypes';
