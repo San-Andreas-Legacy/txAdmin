@@ -9,12 +9,12 @@
     <p align="center">
         Join our Discord Server: &nbsp; <a href="https://discord.gg/AFAAXzq"><img src="https://discordapp.com/api/guilds/577993482761928734/widget.png?style=shield"></img></a>
     </p>
-    <p align="center">
-        <a href="https://zap-hosting.com/txadmin4" target="_blank" rel="noopener">
-            <img src="docs/zaphosting.png" alt="zap-hosting"></img>
-        </a>
-    </p>
 </p>
+
+> [!IMPORTANT]
+> This is a Fork of txAdmin, you can find the original repository [here](https://github.com/citizenfx/txAdmin).
+> 
+> This is a development repo, things here are most likely unfinished hence will not work, so if you're using this don't expect support from myself or people on txAdmin discord because it is a modified build.
 
 ## Main Features
 - Recipe-based Server Deployer: create a server in under 60 seconds! ([docs/recipe.md](docs/recipe.md))
